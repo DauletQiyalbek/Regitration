@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import com.google.android.material.textfield.TextInputLayout;
 
+
 import static com.example.registration.StoreDatabase.COLUMN_EMAIL;
 import static com.example.registration.StoreDatabase.COLUMN_PASSWORD;
 import static com.example.registration.StoreDatabase.TABLE_USER;
@@ -31,18 +32,17 @@ public class SignIn extends AppCompatActivity implements View.OnClickListener {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_in);
-        initViews();
-    }
 
-    public  void initViews(){
         in_email = findViewById(R.id.in_email);
         in_password = findViewById(R.id.in_password);
         btn_signIN = findViewById(R.id.btn_signIN);
-        tv_signUp = findViewById(R.id.tv_signIn);
+        tv_signUp = findViewById(R.id.tv_signUp);
+
+        btn_signIN.setOnClickListener(this);
+        tv_signUp.setOnClickListener(this);
 
         storeDatabase = new StoreDatabase(this);
         sqLiteDatabase = storeDatabase.getWritableDatabase();
-
     }
 
     @Override
@@ -52,7 +52,7 @@ public class SignIn extends AppCompatActivity implements View.OnClickListener {
                 boolean loginAccount = true;
 
                 String userEmail = in_email.getEditText().getText().toString();
-                String userPassword = in_email.getEditText().getText().toString();
+                String userPassword = in_password.getEditText().getText().toString();
 
                 if (userEmail.isEmpty()){
                     in_email.setError("Try again!");
@@ -63,8 +63,10 @@ public class SignIn extends AppCompatActivity implements View.OnClickListener {
                     loginAccount = false;
                 }
                 if (loginAccount){
+
                     Cursor cursor = sqLiteDatabase.rawQuery("SELECT * FROM " + TABLE_USER + " WHERE " +
-                            COLUMN_EMAIL+"=? AND "+ COLUMN_PASSWORD+ "=? ",new String[]{userEmail,userPassword});
+                            COLUMN_EMAIL+ "=? AND "+COLUMN_PASSWORD+ "=? ",new String[]{userEmail,userPassword});
+
                     if (cursor != null & cursor.getCount() > 0){
                         cursor.moveToFirst();
                         Toast.makeText(this, "Welcome!"+userEmail, Toast.LENGTH_SHORT).show();
@@ -74,6 +76,12 @@ public class SignIn extends AppCompatActivity implements View.OnClickListener {
                         Toast.makeText(this, "User not found", Toast.LENGTH_SHORT).show();
                     }
                 }
+                break;
+
+            case R.id.tv_signUp:
+                Intent intent = new Intent(SignIn.this,SignUp.class);
+                startActivity(intent);
+                break;
         }
     }
 }
