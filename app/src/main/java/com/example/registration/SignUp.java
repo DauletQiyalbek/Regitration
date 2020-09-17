@@ -65,7 +65,7 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener {
                     up_username.setError("Try again!");
                     createAccount = false;
                 }
-                if (email.isEmpty() && Patterns.EMAIL_ADDRESS.matcher(email).matches()){
+                if (email.isEmpty() || !Patterns.EMAIL_ADDRESS.matcher(email).matches()){
                     up_email.setError("Try again!");
                     createAccount = false;
                 }
